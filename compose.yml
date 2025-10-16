@@ -1,0 +1,32 @@
+services:
+  web:
+    container_name: "web"
+  
+  
+  db:
+    build:
+      context: .
+      Dockerfile: Dockerfile
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    volumns:
+      - db_data:/var/lib/mysql
+  nginx:
+    container_name: nginx_server
+    build:
+      context: ./nginx
+      Dockerfile: Dockerfile
+    environment:
+      DB_USERNAME=root
+      DB_DATABASE=p@ssword
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on:
+      - web
+      - db
+
+volumes:
+  db_data:
